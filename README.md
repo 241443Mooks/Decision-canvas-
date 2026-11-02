@@ -110,3 +110,21 @@ Copy this into a Codex task with this repository selected:
 - [Radar resource record](https://github.com/241443Mooks/Open-license-radar/blob/main/data/opportunities.csv) and [original experiment](https://github.com/241443Mooks/Open-license-radar/blob/main/data/experiments.csv).
 - [React Flow docs](https://reactflow.dev/learn), [save/restore example](https://reactflow.dev/examples/interaction/save-and-restore), [core licence](https://github.com/xyflow/xyflow/blob/main/LICENSE).
 - [Cloudflare platform guidance](https://developers.cloudflare.com/pages/framework-guides/), [static assets](https://developers.cloudflare.com/workers/static-assets/get-started/), [Git-backed builds](https://developers.cloudflare.com/workers/ci-cd/builds/).
+
+
+## Running this implementation
+
+Requires Node.js 20 or newer. From the repository directory:
+
+```sh
+npm install
+npm run dev
+```
+
+Open http://localhost:5173. `npm test` runs model and import validation checks, `npm run typecheck` checks JavaScript syntax, and `npm run build` produces the static `dist` directory. There is no server-side application or data collection. Use Export for a backup: browser storage can be cleared and does not sync between devices.
+
+This initial implementation uses dependency-free browser JavaScript rather than the proposed React, TypeScript, Vite and React Flow stack. It keeps the board format separate from the interface and provides a static build, but a future migration would be needed to use those proposed libraries. The connection form is the supported way to create links; dragging between cards is not implemented. The native canvas supports mouse and touch movement and buttons for zoom and fit.
+
+### Cloudflare Workers Static Assets
+
+The checked-in `wrangler.jsonc` serves `dist`. In Cloudflare, connect this repository to a Worker, use `npm run build` as the build command, and use `npx wrangler deploy` as the deploy command. The owner must authorize the GitHub integration and confirm the workers.dev deployment. No live deployment has been verified yet.
