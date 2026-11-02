@@ -1,12 +1,30 @@
 # Decision Canvas
 An exploratory visual thinking tool, grown from [Open Licence Opportunity Radar OL-001](https://github.com/241443Mooks/Open-license-radar/blob/main/data/experiments.csv).
 
-**Status: first playable implementation available for review; not yet deployed.** The first aim is to get something tangible into SMooks' hands quickly and discover what is interesting. No fixed audience, business model or product direction is assumed.
+**Status (2 November 2026): first playable deployed; paused for curiosity-led exploration.** SMooks confirmed the live deployment. No further development is scheduled: leave it for a few days and return when a question, use case or spark suggests something worth trying. No fixed audience, business model or product direction is assumed.
+
+**[Open Decision Canvas](https://decision-canvas.corneliuslobster.workers.dev/)**
+
+## What it is and what it is for
+
+Decision Canvas is a visual thinking space. Put thoughts onto cards and connect them to show how they relate. It is useful when a list does not capture the relationships between options, evidence, constraints and actions.
+
+Possible uses include exploring a decision, understanding process dependencies, developing an idea, sketching story branches, or explaining your thinking. For example, map "What should Lobster Labs build next?" with a few options, supporting considerations and unanswered questions. These are possible uses, not validated product claims.
+
+## What it can and cannot do
+
+The current app supports editable movable cards, three labelled relationship types, drag-to-connect and a connection form, pan/zoom/fit, undo/redo, browser-local saving, JSON import/export, and a phone card list/editor. The feature table below gives more detail.
+
+It does not understand or verify the content. An evidence card records what you label as evidence; a dependency connection does not enforce a workflow or calculate a schedule.
+
+There is currently no AI, automatic research, option scoring, live collaboration, comments, account system, cloud backup, cross-device sync, built-in multi-board library, reminders or external integrations.
+
+**Sharing the website link does not share your board.** Each visitor's current board stays in their browser. Export JSON to keep a backup or transfer a board. Clearing browser storage can remove saved work.
 
 ## The first experiment
 Can moving and connecting a handful of thoughts help someone see a choice, dependency or unresolved question more clearly?
 
-Build one editable canvas with a useful ten-card example, plus a blank start. The sample explores "Which small idea should we try next?" with a question, three options, supporting considerations, a constraint, an unknown and a next action. Use invented, non-sensitive content.
+The first version provides one editable canvas with a useful ten-card example, plus a blank start. The sample explores "Which small idea should we try next?" with a question, three options, supporting considerations, a constraint, an unknown and a next action. Use invented, non-sensitive content.
 
 The ten cards are a demonstration and acceptance test, **not a hard limit**.
 
@@ -28,14 +46,14 @@ The ten cards are a demonstration and acceptance test, **not a hard limit**.
 
 Browser storage is not a backup or cross-device sync. Make this clear in the UI. Handle storage failures without losing the working board. Reopening the app on another device does not bring the board with it.
 
-## Delivery slices
+## Original delivery slices
 1. **First touch:** rendered example, movable cards, editable text and connections. Make this available as a preview as soon as it runs; do not wait for every convenience.
 2. **Usable experiment:** persistence, JSON round-trip, blank start, undo/redo, responsive controls and targeted checks.
 3. **Web access:** connect this GitHub repository to Cloudflare, verify a deployment, record the actual URL here.
 
 Planning budget: roughly **1–2 focused build days** for this deliberately bounded prototype, not a promised deadline. Get the first runnable slice out before optional additions. If polish or infrastructure expands the estimate, record the tradeoff and keep the core small.
 
-## Technology proposal
+## Technology
 - React + TypeScript + Vite.
 - React Flow (`@xyflow/react`) for nodes, connections and viewport interaction.
 - A versioned board data model with stable node/edge IDs and plain JSON; keep it independent of UI components.
@@ -48,24 +66,27 @@ React Flow is the reusable building block, not a finished decision-making produc
 ## Cloudflare route
 Cloudflare currently recommends Workers for new projects. Use Workers Static Assets for the Vite build. Keep this repository as the source of truth.
 
-After the first working implementation:
-1. The owner signs into Cloudflare and authorises its GitHub integration for this repository.
-2. Create/connect a Worker to this repository and select the intended production branch.
-3. Configure the committed build/deploy scripts and Wrangler static-asset configuration; expected asset output is `dist`.
-4. Enable the provided `workers.dev` URL. No custom domain is needed for the experiment.
-5. Confirm a Git push builds/deploys and the live board loads. Verify persistence and import/export on the deployed origin, not just localhost.
+The first deployment is live at https://decision-canvas.corneliuslobster.workers.dev/ (owner-confirmed on 2 November 2026). Cloudflare is connected to this repository.
+
+Build settings:
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Root directory: `/`
+- Static asset output: `dist`
+
+The build command must run before deployment so that `dist` exists. Deployed-origin persistence and import/export checks have not been independently verified in this documentation update.
 
 The public app and each visitor's local board are different things: publishing the app must not publish a visitor's saved board. Browser-local data is tied to its origin; changing the hosting URL does not migrate it automatically. If a private app is desired, configure access separately.
 
 Do not request passwords or paste API tokens into source, issues or chat. Owner sign-in/GitHub authorisation happens through provider UI. Hosting tiers/limits should be checked during setup; no paid plan is required by this architecture, but no blanket zero-cost promise is made.
 
-## What we need from SMooks
-**To start coding:** nothing further about audience, branding or final direction. The defaults above are enough.
-**For Codex cloud:** ensure Codex can access this repository; a new repository may need to be enabled in its GitHub permissions/environment.
-**For hosting:** Cloudflare account sign-in and repository authorisation when the app is ready.
-**After first touch:** play for five minutes and tell us what felt useful, awkward, missing or unexpectedly interesting. A real example is welcome, not a prerequisite.
+## Returning to the experiment
 
-Working defaults: Decision Canvas as the temporary name; sample content first; public application with browser-local boards; no paid APIs; phone usability included.
+Nothing is required now. Leave the app available and return when curiosity suggests a use. There is no deadline or commitment to expand it.
+
+When a spark comes, try one small question and note what becomes clearer, what feels awkward, and what you naturally want to do next. Choose at most one next experiment from that experience. Possible directions below are optional, not a scheduled backlog.
+
+Working defaults remain: Decision Canvas as the temporary name; public application with browser-local boards; no paid APIs; phone usability included.
 
 ## Acceptance checks
 - Create and edit at least ten cards; add each of the three relationship types.
@@ -101,8 +122,8 @@ First SMooks tries a real or playful question. Note:
 
 Then, if useful, ask two people to map a real workflow ambiguity, matching the radar's original success test. Neither enjoyment nor a successful prototype establishes commercial demand.
 
-## Codex implementation brief
-Copy this into a Codex task with this repository selected:
+## Original Codex implementation brief
+Retained as the original build brief, not an instruction to rebuild the app or resume development automatically:
 
 > Read README.md and any applicable AGENTS.md. Implement the first playable Decision Canvas described here, in delivery slices. Start with React + TypeScript + Vite and React Flow, a ten-card worked example and a blank start. Get a runnable interactive canvas working first, then finish the bounded persistence, JSON round-trip, recovery and accessibility scope. Keep board data versioned and independent of view components. Include a concise run/deploy guide and Cloudflare Workers Static Assets configuration. Do not add backend services, accounts, AI calls, analytics or Pro dependencies. Run meaningful checks against the acceptance list and report verification limits. Open a reviewable PR with setup commands, completed scope and remaining work. Do not claim a live deployment without an actual successful deployment URL; owner Cloudflare authorisation can follow separately.
 
@@ -127,10 +148,10 @@ The canvas uses React, TypeScript, Vite and the MIT-licensed React Flow core (`@
 
 The current board and its viewport auto-save in this browser. If storage fails, the save indicator reports the failure and the in-memory board can still be exported. Browser storage is not a backup or cross-device sync. Imports are validated before replacing the board.
 
-Verification: TypeScript checking, production build and model tests run locally. Chromium checks covered card movement, drag-to-connect, editing, undo/redo, reload, JSON export/import, invalid imports, phone card editing and the connection form, and a simulated storage write failure followed by export. Deployment and deployed-origin checks remain outstanding.
+Verification: TypeScript checking, production build and model tests run locally. Chromium checks covered card movement, drag-to-connect, editing, undo/redo, reload, JSON export/import, invalid imports, phone card editing and the connection form, and a simulated storage write failure followed by export. The owner confirmed the live Cloudflare deployment on 2 November 2026. The checks above were local; deployed-origin interaction checks remain unverified.
 
 React Flow core is MIT licensed; production dependency notices are included in `public/THIRD_PARTY_LICENSES.txt` and the built site. Dependency license information is also available in each package under `node_modules`; no Pro packages are used.
 
 ### Cloudflare Workers Static Assets
 
-The checked-in `wrangler.jsonc` serves `dist`. In Cloudflare, connect this repository to a Worker, use `npm run build` as the build command, and use `npx wrangler deploy` as the deploy command. The owner must authorize the GitHub integration and confirm the workers.dev deployment. No live deployment has been verified yet.
+The checked-in `wrangler.jsonc` serves `dist`. In Cloudflare, connect this repository to a Worker, use `npm run build` as the build command, and use `npx wrangler deploy` as the deploy command. The initial deployment is live at https://decision-canvas.corneliuslobster.workers.dev/, as confirmed by the owner on 2 November 2026.
