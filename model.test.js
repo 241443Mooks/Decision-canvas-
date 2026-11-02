@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {example,blank,validate,removeCard,duplicateCard} from './src/model.js';
+test('example and JSON round trip preserve the board',()=>{const b=example();assert.equal(b.cards.length,10);assert.deepEqual(validate(JSON.parse(JSON.stringify(b))),b);assert.equal(blank().cards.length,0)});
+test('duplicate has a new id and deleting a card removes connections',()=>{const b=example();const id=duplicateCard(b,'e1');assert.notEqual(id,'e1');assert.equal(b.cards.length,11);removeCard(b,'e1');assert.ok(b.connections.every(e=>e.source!=='e1'&&e.target!=='e1'));validate(b)});
+test('rejects malformed data, dangling edges, and unsupported versions',()=>{for(const mutate of [b=>b.version=2,b=>b.cards.push({...b.cards[0]}),b=>b.connections[0].target='missing',b=>b.viewport.zoom=0]){const b=example();mutate(b);assert.throws(()=>validate(b))}});

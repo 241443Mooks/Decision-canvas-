@@ -1,7 +1,7 @@
 # Decision Canvas
 An exploratory visual thinking tool, grown from [Open Licence Opportunity Radar OL-001](https://github.com/241443Mooks/Open-license-radar/blob/main/data/experiments.csv).
 
-**Status (2 November 2026): scoped, not implemented or deployed.** This repository starts with a build-ready brief. The first aim is to get something tangible into SMooks' hands quickly and discover what is interesting. No fixed audience, business model or product direction is assumed.
+**Status: first playable implementation available for review; not yet deployed.** The first aim is to get something tangible into SMooks' hands quickly and discover what is interesting. No fixed audience, business model or product direction is assumed.
 
 ## The first experiment
 Can moving and connecting a handful of thoughts help someone see a choice, dependency or unresolved question more clearly?
@@ -110,3 +110,27 @@ Copy this into a Codex task with this repository selected:
 - [Radar resource record](https://github.com/241443Mooks/Open-license-radar/blob/main/data/opportunities.csv) and [original experiment](https://github.com/241443Mooks/Open-license-radar/blob/main/data/experiments.csv).
 - [React Flow docs](https://reactflow.dev/learn), [save/restore example](https://reactflow.dev/examples/interaction/save-and-restore), [core licence](https://github.com/xyflow/xyflow/blob/main/LICENSE).
 - [Cloudflare platform guidance](https://developers.cloudflare.com/pages/framework-guides/), [static assets](https://developers.cloudflare.com/workers/static-assets/get-started/), [Git-backed builds](https://developers.cloudflare.com/workers/ci-cd/builds/).
+
+
+## Running this implementation
+
+Requires Node.js 20.19 or newer (or Node.js 22.12 or newer). From the repository directory:
+
+```sh
+npm install
+npm run dev
+```
+
+Open http://localhost:5173. `npm test` runs model and import validation checks, `npm run typecheck` runs TypeScript checking, and `npm run build` produces the static `dist` directory. There is no server-side application or data collection. Use Export for a backup: browser storage can be cleared and does not sync between devices.
+
+The canvas uses React, TypeScript, Vite and the MIT-licensed React Flow core (`@xyflow/react`). Drag a card to move it, drag from its bottom handle to another card's top handle to connect them, and use the connection form as a keyboard and phone-friendly alternative. New dragged connections start as “supports”; change the relationship in the connections list. React Flow provides pan, zoom and fit controls. The version 1 board JSON and localStorage key from the previous prototype remain compatible.
+
+The current board and its viewport auto-save in this browser. If storage fails, the save indicator reports the failure and the in-memory board can still be exported. Browser storage is not a backup or cross-device sync. Imports are validated before replacing the board.
+
+Verification: TypeScript checking, production build and model tests run locally. Chromium checks covered card movement, drag-to-connect, editing, undo/redo, reload, JSON export/import, invalid imports, phone card editing and the connection form, and a simulated storage write failure followed by export. Deployment and deployed-origin checks remain outstanding.
+
+React Flow core is MIT licensed; production dependency notices are included in `public/THIRD_PARTY_LICENSES.txt` and the built site. Dependency license information is also available in each package under `node_modules`; no Pro packages are used.
+
+### Cloudflare Workers Static Assets
+
+The checked-in `wrangler.jsonc` serves `dist`. In Cloudflare, connect this repository to a Worker, use `npm run build` as the build command, and use `npx wrangler deploy` as the deploy command. The owner must authorize the GitHub integration and confirm the workers.dev deployment. No live deployment has been verified yet.
