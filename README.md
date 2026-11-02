@@ -1,7 +1,7 @@
 # Decision Canvas
 An exploratory visual thinking tool, grown from [Open Licence Opportunity Radar OL-001](https://github.com/241443Mooks/Open-license-radar/blob/main/data/experiments.csv).
 
-**Status (2 November 2026): scoped, not implemented or deployed.** This repository starts with a build-ready brief. The first aim is to get something tangible into SMooks' hands quickly and discover what is interesting. No fixed audience, business model or product direction is assumed.
+**Status: first playable implementation available for review; not yet deployed.** The first aim is to get something tangible into SMooks' hands quickly and discover what is interesting. No fixed audience, business model or product direction is assumed.
 
 ## The first experiment
 Can moving and connecting a handful of thoughts help someone see a choice, dependency or unresolved question more clearly?
@@ -114,16 +114,22 @@ Copy this into a Codex task with this repository selected:
 
 ## Running this implementation
 
-Requires Node.js 20 or newer. From the repository directory:
+Requires Node.js 20.19 or newer (or Node.js 22.12 or newer). From the repository directory:
 
 ```sh
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173. `npm test` runs model and import validation checks, `npm run typecheck` checks JavaScript syntax, and `npm run build` produces the static `dist` directory. There is no server-side application or data collection. Use Export for a backup: browser storage can be cleared and does not sync between devices.
+Open http://localhost:5173. `npm test` runs model and import validation checks, `npm run typecheck` runs TypeScript checking, and `npm run build` produces the static `dist` directory. There is no server-side application or data collection. Use Export for a backup: browser storage can be cleared and does not sync between devices.
 
-This initial implementation uses dependency-free browser JavaScript rather than the proposed React, TypeScript, Vite and React Flow stack. It keeps the board format separate from the interface and provides a static build, but a future migration would be needed to use those proposed libraries. The connection form is the supported way to create links; dragging between cards is not implemented. The native canvas supports mouse and touch movement and buttons for zoom and fit.
+The canvas uses React, TypeScript, Vite and the MIT-licensed React Flow core (`@xyflow/react`). Drag a card to move it, drag from its bottom handle to another card's top handle to connect them, and use the connection form as a keyboard and phone-friendly alternative. New dragged connections start as “supports”; change the relationship in the connections list. React Flow provides pan, zoom and fit controls. The version 1 board JSON and localStorage key from the previous prototype remain compatible.
+
+The current board and its viewport auto-save in this browser. If storage fails, the save indicator reports the failure and the in-memory board can still be exported. Browser storage is not a backup or cross-device sync. Imports are validated before replacing the board.
+
+Verification: TypeScript checking, production build and model tests run locally. Chromium checks covered card movement, drag-to-connect, editing, undo/redo, reload, JSON export/import, invalid imports, phone card editing and the connection form, and a simulated storage write failure followed by export. Deployment and deployed-origin checks remain outstanding.
+
+React Flow core is MIT licensed; production dependency notices are included in `public/THIRD_PARTY_LICENSES.txt` and the built site. Dependency license information is also available in each package under `node_modules`; no Pro packages are used.
 
 ### Cloudflare Workers Static Assets
 
